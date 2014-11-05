@@ -11,18 +11,31 @@ var splashTimer = 600.00;
 //InMenu UI Constansts
 var standWidth = 100;
 var buttonsPlaceY = 200;
+//Player Pos
+var PLAYER_XPOS = 150;
+var PLAYER_YPOS = 100;
+//Bidder Pos
+var BIDDER_XPOS = 650;
+var BIDDER_YPOS = 250;
+
+var VEHICLE_XPOS = 200;
+var VEHICLE_YPOS = 250;
+
+//Buttons functions
 var auctionButton = {};
 var repairButton = {};
 var bidButton = {};
 var inventoryButton = {};
 var enemies = [];
+
+
 //Buttons
 //var auctionButton = document.getElementById("auction");
 //auctionButton.onclick = auctionMode(); 
 
 
 //AI Variables
-
+var playerBid = 0;
 
 
 var timer = 0;
@@ -211,7 +224,8 @@ var assetLoader = (function()
  * @param {integer} progress - Number of assets loaded
  * @param {integer} total - Total number of assets
  */
-assetLoader.progress = function(progress, total) {
+assetLoader.progress = function(progress, total) 
+{
   var pBar = document.getElementById('progress-bar');
   pBar.value = progress / total;
   document.getElementById('p').innerHTML = Math.round(pBar.value * 100) + "%";
@@ -222,8 +236,6 @@ function Init()
 {
 
 }
-
-
 
 
 //Load the splash screen first
@@ -317,46 +329,18 @@ var background = (function()
     
    };
 
-  /**
-   * Reset background to zero
-   */
-  this.reset = function() 
-  {
-    bg.x = 0;
-    bg.y = 0;
-  }
+  //Reset background to zero
+ 
+   this.reset = function() 
+   {
+     bg.x = 0;
+     bg.y = 0;
+   }
      
   return {
     draw: this.draw,
     reset: this.reset,
    
-  };
-})();
-var btn = {};
-
-
-//Draw menu  Auction Objects
-var inventoryMenu = (function() 
-{
-  
-    this.draw = function() 
-    {
-  //  context.drawImage(assetLoader.images.auctionButton, 0, buttonsPlaceY);
-   	
-   };
- 	
-  /**
-   * Reset background to zero
-   */
-    this.reset = function() 
-    {
-  
-
-    }
-      
-  return {
-    draw: this.draw,
-    reset: this.reset
   };
 })();
 
@@ -400,11 +384,11 @@ var vehicle =(function(vehicle)
 	vehicle.basePrice   = 0;
 	
 	//sprite sheet
-	vehicle.sheet    = new SpriteSheet('images/logo.png', vehicle.width, vehicle.height);
+	vehicle.sheet    = new SpriteSheet('images/vehicle.jpg', vehicle.width, vehicle.height);
 	vehicle.drawAnim = new Animation(vehicle.sheet, 0, 0, 0);
 	vehicle.anim     = vehicle.drawAnim;
 	
-	Vector.call(vehicle, 0, 0, 0, vehicle.dy);
+	Vector.call(vehicle,  VEHICLE_XPOS,  VEHICLE_YPOS, 0, vehicle.dy);
 	
 	vehicle.update   = function()
 	{
@@ -421,8 +405,8 @@ var vehicle =(function(vehicle)
 	   
     vehicle.reset = function() 
     {
-    vehicle.x = 164;
-    vehicle.y = 150;
+	   vehicle.x = VEHICLE_XPOS;
+	   vehicle.y = VEHICLE_YPOS;
     
     }
     return vehicle;
@@ -431,10 +415,51 @@ var vehicle =(function(vehicle)
 })(Object.create(Vector.prototype));
 
 
+//AI robots
+var bidder =(function(bidder)
+{
+	bidder.width       = 40;
+	bidder.height      = 30;
+	bidder.description = "";
+	bidder.high        = 0;
+	bidder.low         = 0;
+	//bid percentage
+	bidder.bidcap      = 0;
+	
+	//sprite sheet
+	bidder.sheet    = new SpriteSheet('images/slime.png', bidder.width, bidder.height);
+	bidder.drawAnim = new Animation(bidder.sheet, 0, 0, 0);
+	bidder.anim     = bidder.drawAnim;
+	
+	Vector.call(bidder,  BIDDER_XPOS,  BIDDER_YPOS, 0, bidder.dy);
+	
+	bidder.update   = function()
+	{
+	  bidder.anim = bidder.drawAnim;
+    }
 
-/**
- * The player object
- */
+   	
+	bidder.draw = function()
+	{
+		bidder.anim.draw(bidder.x, bidder.y);
+	};
+	
+	
+    bidder.reset = function() 
+    {
+	   bidder.x = BIDDER_XPOS;
+	   bidder.y = BIDDER_YPOS;
+    
+    }
+    return bidder;
+
+	
+})(Object.create(Vector.prototype));
+
+
+
+
+// The player object
 var player = (function(player) 
 {
   // add properties directly to the player imported object
@@ -456,7 +481,7 @@ var player = (function(player)
   player.fallAnim  = new Animation(player.sheet, 4, 11, 11);
   player.anim      = player.walkAnim;
 
-  Vector.call(player, 0, 0, 0, player.dy);
+  Vector.call(player,  PLAYER_XPOS,  PLAYER_YPOS, 0, player.dy);
 
   var jumpCounter = 0;  // how long the jump button can be pressed down
 
@@ -499,16 +524,18 @@ var player = (function(player)
   /**
    * Draw the player at it's current position
    */
-  player.draw = function() {
+  player.draw = function() 
+  {
     player.anim.draw(player.x, player.y);
   };
 
   /**
    * Reset the player's position
    */
-  player.reset = function() {
-    player.x = 164;
-    player.y = 150;
+  player.reset = function() 
+  {
+    player.x = PLAYER_XPOS;
+    player.y = PLAYER_YPOS;
   };
 
   return player;
@@ -555,13 +582,6 @@ function update()
     previousTime = Date.now();
     timer += deltaTime;
 
-    if (timer > 1)
-    {
-        //timer = -999999; //test hack
-       // mainMenu();
-     }
-    console.log("updating bitches");
-    
 	
 }
 
@@ -584,11 +604,13 @@ function updateVehicles()
   vehicle.update();
   vehicle.draw();
 
-  // game oversplashTimer--;
-  if (vehicle.y + vehicle.height >= canvas.height) 
-  {
-    gameOver();
-  }
+}
+function updateBidders() 
+{
+  
+  bidder.update();
+  bidder.draw();
+
 }
 
 
@@ -699,6 +721,7 @@ function animate()
     updateEnemies();
    // spawnEnemySprites(); 
 	updateVehicles();
+	updateBidders();
     
     
     if(timer >= 400.00)
@@ -707,6 +730,8 @@ function animate()
 	}
     // draw the money HUD
     context.fillText('Money :  ' + '$'+ money  , canvas.width - 240, 90);
+    //player bid
+    context.fillText('Player Bid :  ' + '$'+ playerBid  ,0, 90);
 
     // spawn a new Sprite
   
@@ -723,11 +748,8 @@ function animate()
  
 function splash() 
 {
-   //document.getElementById('splash');;
-  console.log("Splash Bitches");
-  console.log(timer);
-  
- 
+  document.getElementById('splash');
+   
   animate();
   $('#progress').hide();
   $('#splash').show();
@@ -765,6 +787,7 @@ function startGame()
   ticker = 0;
   stop = false;
   money = 2000;
+  playerBid = 0;
    
   context.font = '26px arial, sans-serif';
   enemies = [];
@@ -780,6 +803,7 @@ function startGame()
   //load auction button
       
 }
+//temp
 var bidAmount = 200;
 
 function auctionMode() 
@@ -792,13 +816,13 @@ function auctionMode()
   ticker = 0;
   stop = false;
   money = 2000;
-
+ 
   context.font = '26px arial, sans-serif';
   update();
- 
+  updateAuctionMode(); 
   animate();
-  playerBidding();
-  console.log("AuctionMode")
+  
+  console.log("AuctionMode");
  //background.draw();
     //inventoryMenu.draw();
 
@@ -813,15 +837,31 @@ function auctionMode()
   assetLoader.sounds.bg.loop = true;
   assetLoader.sounds.bg.play();
 }
+function updateAuctionMode()
+{
+	playerBidding();
+	var currentBid;
+	var vehiclePrice = 200;
+	
+	currentBid = vehiclePrice + playerBid;
+	
+}
 
 //Player Bidding Function
 function playerBidding() 
 {
+	
 	console.log("you're a dick man");
 	money = money - bidAmount;
+	playerBid +=  200;
 	if(money <= 0)
 	{
 		money = 0;
+		 // draw the money HUD
+       
+
+		gameOver();
+		
 	}
 }
 
