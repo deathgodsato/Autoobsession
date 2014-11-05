@@ -3,6 +3,8 @@
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 var player, money, stop, ticker;
+//vehicle class
+var vehicle = [];
 var canUseLocalStorage = 'localStorage' in window && window.localStorage !== null;
 var playSound;
 var splashTimer = 600.00;
@@ -11,6 +13,7 @@ var standWidth = 100;
 var buttonsPlaceY = 200;
 var auctionButton = {};
 var repairButton = {};
+var bidButton = {};
 var inventoryButton = {};
 var enemies = [];
 //Buttons
@@ -24,6 +27,19 @@ var enemies = [];
 
 var timer = 0;
 var previousTime = Date.now();
+
+
+window.performance = window.performance || {};
+performance.now = (function() {
+    return performance.now       ||
+        performance.mozNow    ||
+        performance.msNow     ||
+        performance.oNow      ||
+        performance.webkitNow ||            
+        Date.now  /*none found - fallback to browser default */
+})();
+
+
 
 
 // set the sound preference
@@ -43,11 +59,8 @@ if (canUseLocalStorage)
 
 update();
 Init();
-/**
- * Get a random number between range
- * @param {integer}
- * @param {integer}
- */
+
+//Get a random number between range
 function rand(low, high) 
 {
   return Math.floor( Math.random() * (high - low + 1) + low );
@@ -64,25 +77,20 @@ function bound(num, low, high)
   return Math.max( Math.min(num, high), low);
 }
 
-/**
- * Asset pre-loader object. Loads all images
- */
- 
- 
+
+//Asset pre-loader object. Loads all images
 var assetLoader = (function() 
 {
   // images dictionary
   this.images        = 
   {
+ 	 //inventory background
     'bg'             : 'images/inventoryMenu.png',
-    'inventoryMenu'  : 'images/settings.png',
-    'repairMenu'     : 'images/settings.png',
-    'auctionButton'     : 'images/settings.png',
-    'repairButton'     : 'images/settings.png',
-    'fundsButton'     : 'images/settings.png',
-    'eventsButton'     : 'images/settings.png',
-    'avatar_normal'  : 'images/normal_walk.png'
-
+   	 //player
+     'avatar_normal'  : 'images/normal_walk.png',
+     //enemies
+     'slime'         : 'images/slime.png',
+     'spikes'        : 'images/slime.png',
 
    };
 
@@ -140,9 +148,9 @@ var assetLoader = (function()
     }
   }
 
-  /**
-   * Create assets, set callback for asset loading, set asset source
-   */
+  
+  //Create assets, set callback for asset loading, set asset source
+  
   this.downloadAll = function() 
   {
     var _this = this;
@@ -217,9 +225,8 @@ function Init()
 
 
 
-/**
- * Load the main menu
- */
+
+//Load the splash screen first
 assetLoader.finished = function() 
 {
   splash();
@@ -267,10 +274,10 @@ function Animation(spritesheet, frameSpeed, startFrame, endFrame)
   for (var frameNumber = startFrame; frameNumber <= endFrame; frameNumber++)
     animationSequence.push(frameNumber);
 
-  /**
-   * Update the animation
-   */
-  this.update = function() {
+  
+   // Update the animation
+  this.update = function() 
+  {
 
     // update to the next frame if it is time
     if (counter == (frameSpeed - 1))
@@ -304,12 +311,10 @@ function Animation(spritesheet, frameSpeed, startFrame, endFrame)
 var background = (function() 
 {
 
-  
- 
-   this.draw = function() {
+   this.draw = function() 
+   {
     context.drawImage(assetLoader.images.bg, 0, 0);
     
-
    };
 
   /**
@@ -317,19 +322,14 @@ var background = (function()
    */
   this.reset = function() 
   {
-    
-   }
+    bg.x = 0;
+    bg.y = 0;
+  }
      
-     
-   this.onClick = function()
-   {
-   	  document.getElementById("gameMenu").click();
-
-   }
   return {
     draw: this.draw,
     reset: this.reset,
-    onClick: this.onClick
+   
   };
 })();
 var btn = {};
@@ -339,63 +339,23 @@ var btn = {};
 var inventoryMenu = (function() 
 {
   
-    this.draw = function() {
-    context.drawImage(assetLoader.images.auctionButton, 0, buttonsPlaceY);
-    context.drawImage(assetLoader.images.repairButton, 200, buttonsPlaceY);
-    context.drawImage(assetLoader.images.eventsButton, 500, buttonsPlaceY);
-	context.drawImage(assetLoader.images.fundsButton, 700, buttonsPlaceY);
-	
+    this.draw = function() 
+    {
+  //  context.drawImage(assetLoader.images.auctionButton, 0, buttonsPlaceY);
+   	
    };
  	
-
   /**
    * Reset background to zero
    */
-  this.reset = function() 
-  {
+    this.reset = function() 
+    {
   
-  	auctionButton.x = 0;
-    auctionButton.y = buttonsPlaceY;
-    auctionButton.style = undefined;
-    auctionButton.clicked = false;
-    
-   
-   
-   
-   
-   // disphide();
 
-    repairButton.x = 200;
-    repairButton.y = buttonsPlaceY;
-    eventsButton.x = 200;
-    eventsButton.y = buttonsPlaceY;
-	fundsButton.x = 200;
-    fundsButton.y = buttonsPlaceY;
-
-    
-    
-
-     }
-     
-    this.click = function ()
-    {
-    	auctionButton.clicked = true;
     }
-    
-    if( auctionButton.clicked = true)
-    {
-    document.getElementById("auction").click();
-    }
-    else
-    {
-    	false;
-    }
-   
-   
-   	
+      
   return {
     draw: this.draw,
-    click:this.click,
     reset: this.reset
   };
 })();
@@ -408,7 +368,8 @@ var inventoryMenu = (function()
  * @param {integer} dx - Change in x.
  * @param {integer} dy - Change in y.
  */
-function Vector(x, y, dx, dy) {
+function Vector(x, y, dx, dy) 
+{
   // position
   this.x = x || 0;
   this.y = y || 0;
@@ -420,10 +381,55 @@ function Vector(x, y, dx, dy) {
 /**
  * Move the player advance the vectors position by dx,dy
  */
-Vector.prototype.advance = function() {
+Vector.prototype.advance = function() 
+{
   this.x += this.dx;
   this.y += this.dy;
 };
+
+
+
+
+var vehicle =(function(vehicle)
+{
+	vehicle.width       = 300;
+	vehicle.height      = 300;
+	vehicle.description = "";
+	vehicle.condition   = 0;
+	vehicle.originality = 0;
+	vehicle.basePrice   = 0;
+	
+	//sprite sheet
+	vehicle.sheet    = new SpriteSheet('images/logo.png', vehicle.width, vehicle.height);
+	vehicle.drawAnim = new Animation(vehicle.sheet, 0, 0, 0);
+	vehicle.anim     = vehicle.drawAnim;
+	
+	Vector.call(vehicle, 0, 0, 0, vehicle.dy);
+	
+	vehicle.update   = function()
+	{
+	  vehicle.anim = vehicle.drawAnim;
+    }
+
+   	
+	vehicle.draw = function()
+	{
+		vehicle.anim.draw(vehicle.x, vehicle.y);
+	};
+	
+	
+	   
+    vehicle.reset = function() 
+    {
+    vehicle.x = 164;
+    vehicle.y = 150;
+    
+    }
+    return vehicle;
+
+	
+})(Object.create(Vector.prototype));
+
 
 
 /**
@@ -559,19 +565,6 @@ function update()
 	
 }
 
-
-window.performance = window.performance || {};
-performance.now = (function() {
-    return performance.now       ||
-        performance.mozNow    ||
-        performance.msNow     ||
-        performance.oNow      ||
-        performance.webkitNow ||            
-        Date.now  /*none found - fallback to browser default */
-})();
-
-
-
 function updatePlayer() 
 {
   
@@ -585,13 +578,22 @@ function updatePlayer()
   }
 }
 
-/**
- * Game loop
- */
+function updateVehicles() 
+{
+  
+  vehicle.update();
+  vehicle.draw();
 
-/**
- * Keep track of the spacebar events
- */
+  // game oversplashTimer--;
+  if (vehicle.y + vehicle.height >= canvas.height) 
+  {
+    gameOver();
+  }
+}
+
+
+
+// Keep track of the spacebar events
 var KEY_CODES = 
 {
   32: 'space'
@@ -623,7 +625,7 @@ document.onkeyup = function(e)
   }
 };
 
-
+//Mouse clicks
 var clicked = false;
 function mouseDownHandler(event)
 {
@@ -637,10 +639,8 @@ function mouseDownHandler(event)
 }
 
 
+//Request Animation Polyfill
 
-/**
- * Request Animation Polyfill
- */
 var requestAnimFrame = (function()
 {
   return  window.requestAnimationFrame       ||
@@ -654,38 +654,32 @@ var requestAnimFrame = (function()
 })();
 
 
-
-function updateEnemies() {
+function updateEnemies() 
+{
   // animate enemies
-  for (var i = 0; i < enemies.length; i++) {
+  for (var i = 0; i < enemies.length; i++) 
+  {
     enemies[i].update();
     enemies[i].draw();
 
     // player ran into enemy
-    if (player.minDist(enemies[i]) <= player.width - platformWidth/2) {
+    if (player.minDist(enemies[i]) <= player.width - platformWidth/2) 
+    {
       gameOver();
     }
   }
 
   // remove enemies that have gone off screen
-  if (enemies[0] && enemies[0].x < -platformWidth) {
+  if (enemies[0] && enemies[0].x < -platformWidth) 
+  {
     enemies.splice(0, 1);
   }
 }
 
-/**
- * Update the players position and draw
- */
-function updatePlayer() {
-  player.update();
-  player.draw();
-
-  // game over
-  if (player.y + player.height >= canvas.height) {
-    gameOver();
-  }
-}
-
+var platformWidth = 20;
+var platformHeight = 30;
+var platformBase = 200;
+var platformSpacer = 200;
 
 
 function animate() 
@@ -699,18 +693,20 @@ function animate()
     background.draw();
     document.getElementById('gameMenu').style.display = 'true';
 
-    console.log("this is ticker" + ticker);
-    console.log(timer);
-	update();
+  	update();
     
     updatePlayer();
+    updateEnemies();
+   // spawnEnemySprites(); 
+	updateVehicles();
+    
     
     if(timer >= 400.00)
 	{
 	  mainMenu();
 	}
     // draw the money HUD
-    context.fillText('Money: ' + money + 'm', canvas.width - 240, 90);
+    context.fillText('Money :  ' + '$'+ money  , canvas.width - 240, 90);
 
     // spawn a new Sprite
   
@@ -771,7 +767,7 @@ function startGame()
   money = 2000;
    
   context.font = '26px arial, sans-serif';
-
+  enemies = [];
 
   animate();
  
@@ -784,14 +780,15 @@ function startGame()
   //load auction button
       
 }
+var bidAmount = 200;
 
 function auctionMode() 
 {
  // context.clearRect(0, 0, canvas.width, canvas.height);
 
   document.getElementById('Auction').style.display = 'true';
-
   
+ 
   ticker = 0;
   stop = false;
   money = 2000;
@@ -800,6 +797,7 @@ function auctionMode()
   update();
  
   animate();
+  playerBidding();
   console.log("AuctionMode")
  //background.draw();
     //inventoryMenu.draw();
@@ -807,9 +805,6 @@ function auctionMode()
   $('#Auction').show();
   $('#menu').removeClass('gameMenu');
   $('#menu').addClass('Auction');
-
-
- 
   $('.sound').show();
 
   
@@ -819,12 +814,18 @@ function auctionMode()
   assetLoader.sounds.bg.play();
 }
 
+//Player Bidding Function
+function playerBidding() 
+{
+	console.log("you're a dick man");
+	money = money - bidAmount;
+	if(money <= 0)
+	{
+		money = 0;
+	}
+}
 
-
-
-/**
- * End the game and restart
- */
+//End the game and restart
 function gameOver() 
 {
   document.getElementById('game-over').style.display = 'true';
@@ -836,23 +837,67 @@ function gameOver()
   assetLoader.sounds.gameOver.play();
 }
 
-/**
- * Click handlers for the different menu screens
- */
-$('.credits').click(function() {
-  
+
+// Click handlers for the different menu screens
+//Credits 
+$('.credits').click(function() 
+{
   $('#main').hide();
   $('#credits').show();
+
   $('#menu').addClass('credits');
 });
+//Credits Back button
 $('.back').click(function() 
 {
   $('#credits').hide();
-  
   $('#menu').removeClass('credits');
 });
 
 
+$('.play').click(function() 
+{
+  $('#menu').hide();
+  $('#gameMenu').show();
+
+  startGame();
+  
+});
+$('.restart').click(function() 
+{
+  $('#game-over').hide();
+  $('#gameMenu').hide();
+
+  startGame();
+});
+
+//InMenuButtons
+//auction Button
+$('#auction').click(function() 
+{
+	$('#menu').hide();
+	$('#auction').show();
+	$('#menu').removeClass('gameMenu');
+	$('#gameMenu').hide();
+	$('#Menu').addClass('auction'); 	
+	auctionMode();
+});
+//Inside Auction Bid Button
+$('#bid').click(function()
+{
+  playerBidding();
+});
+
+//Repair to menu Repair
+$('#repair').click(function()
+{
+      //Some code
+  $('#menu').hide();
+  $('#gameMenu').show();
+
+});
+
+//Sound Button
 
 $('.sound').click(function() 
 {
@@ -884,40 +929,9 @@ $('.sound').click(function()
     }
   }
 });
-$('.play').click(function() 
-{
-  $('#menu').hide();
-  $('#gameMenu').show();
 
-  startGame();
-  
-});
-$('.restart').click(function() 
-{
-  $('#game-over').hide();
-  $('#gameMenu').hide();
 
-  startGame();
-});
 
-//InMenuButtons
-//auction Button
-$('#auction').click(function() 
-{
-	$('#menu').hide();
-	$('#auction').show();
-	$('#menu').removeClass('gameMenu');
-	$('#gameMenu').hide();
-	$('#Menu').addClass('auction'); 	
-	auctionMode();
-});
- $('#repair').click(function()
- {
-      //Some code
-  $('#menu').hide();
-  $('#gameMenu').show();
-
- });
 
 /*
 $('.repair').click(function() 
