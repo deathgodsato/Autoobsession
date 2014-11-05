@@ -1,0 +1,338 @@
+﻿*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body 
+{
+  font-family: arial, sans-serif;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+  color:maroon;
+}
+
+canvas 
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid black;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+ul 
+{
+  list-style: none;
+  padding: 0;
+  margin: 0
+}
+li 
+{
+  padding: 10px 0;
+}
+
+a 
+{
+  text-decoration: none;
+  color: inherit;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.wrapper 
+{
+ height:600px;
+  width: 900px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+#menu 
+{
+  position: absolute;
+  height:600px;
+  width: 900px;
+  border: 1px solid black;
+  z-index: 2;
+  text-align: center;
+  background-color: black;
+}
+#menu.main 
+{
+  background-image:url('../images/AbsuMenu.png');
+  height:600px;
+  width: 900px;
+}
+#splash
+{
+  background-image: url('../images/logo.png');
+  height:600px;
+  width: 900px;
+  z-index: 20;
+
+}
+
+
+
+#menu.credits 
+{
+  background-image: url('../images/credits-bg.png');
+  
+}
+
+#progress 
+{
+  height: 12%;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+#percent 
+{
+  color: white;
+  font-weight: bold;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+#progress-bar 
+{
+  width: 200px;
+}
+
+.sound 
+{
+  display: none;
+  position: absolute;
+  bottom: 5em;
+  left: 3em;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+  z-index: 3;
+}
+.sound-on 
+{
+  background-image: url('../images/soundOn.png');
+  background-repeat: no-repeat;
+}
+/* Inventory Menu Buttons*/
+#auction
+{
+  background: url('../images/settings.png') no-repeat 0 0;
+  color: white;
+  font-weight: bold;
+  width:150px;
+  height:50px; 
+  cursor:pointer;
+}
+#repair
+{
+  background: url('../images/settings.png') no-repeat 0 0;
+  color: white;
+  font-weight: bold;
+  width:150px;
+  height:50px;
+  cursor:pointer;
+
+  
+}
+#addFunds
+{
+  background: url('../images/settings.png') no-repeat 0 0;
+  color: white;
+  font-weight: bold;
+   width:150px;
+   height:50px;
+   cursor:pointer;
+}
+#myCars
+{
+  background: url('../images/settings.png') no-repeat 0 0;
+  color: white;
+  font-weight: bold;
+   width:150px;
+   height:50px;
+   cursor:pointer;
+ 
+}
+
+#bid
+{
+  background: url('../images/settings.png') no-repeat 0 0;
+  color: white;
+  font-weight: bold;
+  width:150px;
+  height:50px;
+  cursor:pointer;
+
+  
+}
+
+
+.sound-off 
+{
+  background-image: url('../images/soundOff.png');
+  background-repeat: no-repeat;
+}
+
+#main 
+{
+  display: none;
+  height: 60%;
+  overflow: auto;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+#menu.gameMenu
+{
+	
+  /*background-image: url('../images/logo.png');*/
+  display:inline-block;
+  text-align: center;
+  padding-top: 92px;
+  z-index: 1;
+  width: 900px;
+  height: 600px;
+  position: absolute;
+
+}
+#money
+{
+ color:aqua;
+	
+}
+#gameMenu 
+{
+/*  background-image: url('../images/inventoryMenu.png');*/
+  display: none;
+  text-align: center;
+  padding-top: 92px;
+  z-index: 1;
+  width: 900px;
+  height: 600px;
+  position: absolute;
+}
+#gameMenu  li 
+{
+  padding: 10px 0;
+  display:inline;
+  margin: 8px;
+  margin-top: 8em;
+}
+
+#Auction
+{
+  /*background-image: url('../images/logo.png');*/
+  display: none;
+  text-align: center;
+  padding-top: 92px;
+  z-index: 1;
+  width: 900px;
+  height: 600px;
+  position: absolute;
+}
+
+#menu.Auction
+{
+	
+ /* background-image: url('../images/logo.png');*/
+  display: none;
+  text-align: center;
+  padding-top: 92px;
+  z-index: 1;
+  width: 900px;
+  height: 600px;
+  position: absolute;
+
+}
+#Auction  li 
+{
+  padding: 5px 0;
+}
+
+
+#main h1 
+{
+  color: #AFCAAF;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+
+
+.button 
+{
+  display: block;
+  width: 150px;
+  height:50px;
+  margin: 0 auto;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #AA2666;
+  color: white;
+  font-weight: bold;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  background-color: #990000;
+  background-image: -webkit-linear-gradient(bottom, #990000 0%, #990000 100%);
+  background-image:         linear-gradient(to bottom, #990000 0%, #B30D5D 100%);
+  border-radius: 5px;
+}
+
+.button:hover 
+{
+  background-color: #990099;
+  background-image: -webkit-linear-gradient(bottom, #B30D5D 0%, #FB1886 100%);
+  background-image:         linear-gradient(to bottom, #B30D5D 0%, #FB1886 100%);
+}
+
+#credits 
+{
+  display: none;
+  line-height: 30px;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+#credits li 
+{
+  padding: 5px 0;
+}
+
+.artwork, .music, .developer 
+{
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.artwork 
+{
+  color: #fa8526;
+}
+.music 
+{
+  color: #e6e71f;
+}
+.developer 
+{
+  color: #13eb8a;
+}
+
+.back, .back:hover 
+{
+  margin-top: 10px;
+}
+
+#game-over 
+{
+  background-image: url('../images/logo.png');
+  display: none;
+  text-align: center;
+  padding-top: 92px;
+  z-index: 1;
+  width: 900px;
+  height: 600px;
+  position: absolute;
+}
