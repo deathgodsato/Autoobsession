@@ -425,6 +425,7 @@ var bidder =(function(bidder)
 	bidder.low         = 0;
 	//bid percentage
 	bidder.bidcap      = 0;
+	bidder.slimeBid    = 0;
 	
 	//sprite sheet
 	bidder.sheet    = new SpriteSheet('images/slime.png', bidder.width, bidder.height);
@@ -436,9 +437,14 @@ var bidder =(function(bidder)
 	bidder.update   = function()
 	{
 	  bidder.anim = bidder.drawAnim;
+	 // bidder.bid = bidder.bid();
     }
-
-   	
+    /*
+	bidder.bid  = function()
+	{
+	 context.fillText('Silme Bid :  ' + '$'+ slimeBid  ,0, 90);
+	}
+   	*/
 	bidder.draw = function()
 	{
 		bidder.anim.draw(bidder.x, bidder.y);
@@ -819,10 +825,22 @@ function auctionMode()
  
   context.font = '26px arial, sans-serif';
   update();
-  updateAuctionMode(); 
+ // updateAuctionMode(); 
   animate();
   
   console.log("AuctionMode");
+  
+   auctionMode.update = function() 
+   {
+     console.log("Shithead");
+     playerBidding();
+	 var currentBid;
+	 var vehiclePrice = 200;
+	
+	 currentBid = vehiclePrice + playerBid;
+
+   }
+  
  //background.draw();
     //inventoryMenu.draw();
 
@@ -836,15 +854,6 @@ function auctionMode()
   assetLoader.sounds.bg.currentTime = 0;
   assetLoader.sounds.bg.loop = true;
   assetLoader.sounds.bg.play();
-}
-function updateAuctionMode()
-{
-	playerBidding();
-	var currentBid;
-	var vehiclePrice = 200;
-	
-	currentBid = vehiclePrice + playerBid;
-	
 }
 
 //Player Bidding Function
