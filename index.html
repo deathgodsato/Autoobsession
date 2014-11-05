@@ -14,50 +14,69 @@
         <div id="percent">Downloading: <span id="p"></span></div>
         <progress id="progress-bar" value="0"></progress>
       </div>
+      <div id="splash">
+      <h2>Adam Glazer and Auto Obsessions Presents !</h2>
+	 </div>
+  
+      
       <div id="main">
         <h1>Auto Obsessions</h1>
         <ul>
           <li><a href="javascript:void(0)" class="button play">Start Game</a></li>
           <li><a href="javascript:void(0)" class="button credits">Credits</a></li>
+  	<!--	  <li><input type="button" id="auction" onclick="auctionMode()"></li> ---->
+  
         </ul>
       </div>
       
-        <div id="gameMenu">
-        <h1>Auto Obsessions</h1>
-        <ul>
-          <li><a href="javascript:void(0)" class="button play">Start Game</a></li>
-          <li><a href="javascript:void(0)" class="button credits">Credits</a></li>
-        </ul>
-      </div>
+  
 
-      
+     
       <div id="credits">
         <ul>
-          <li class="artwork">Character design and art: <a href="http://www.triosdevelopers/A.Sanchez/index.html/">Alexander Sanchez</a></li>
+          <li class="artwork">Character design and art: <a href=".../triosdevelopers.com/A.Sanchez/index.html">
+														Alexander Sanchez</a></li>
            <li class="artwork">Programming <a href="http://www.triosdevelopers/A.Sanchez/index.html/">Alexander Sanchez</a></li>
 
          </ul>
           <ul>
-          <li class="developer">Developer: <a href="http://blog.sklambert.com/">Alexander Sanchez</a></li>
+          <li class="developer">Developer: <a href="http://triosdevelopers.com/A.Sanchez/http://triosdevelopers.com/A.Sanchez/">
+													Alexander Sanchez</a></li>
         </ul>
         <a href="javascript:void(0)" class="button back">Back</a>
-      </div>
+      </div> 
     </div>
+       
+  
     <canvas id="canvas" width="900" height="600">
       <p>You're browser does not support the required functionality to play this game.</p>
       <p>Please update to a modern browser such as <a href="www.google.com/chrome/‎">Google Chrome</a> to play.</p>
     </canvas>
-    <div id="game-over">
-      <h2>Your a rascal  <span id="score"></span> ahoy!</h2>
+ 
+    
+       <div id="gameMenu">
+        <h1>My Inventory</h1>
+        <ul>
+          <li><a><input type="button" id="auction" onmouseover="auctionButton()" onclick="auctionMode()">Auction</a></li>
+          <li><input type="button" id="addFunds" onmouseover="addFundsButton()" onclick="addFundState()"></li>
+          <li><input type="button" id="repair" onmouseover="addFundsButton()" onclick="repairState()"></li>
+          <li><input type="button" id="myCars" onmouseover="inventoryButton()" onclick="inventoryState()"></li>
+        </ul>
+      </div>
+      
+    
+      <div id="Auction">
+        <h1>Auction</h1>
+        <ul>
+          <li><input type="button" id="auction" onmouseover="auctionButton()" onclick="auctionMode()"></li>
+       </ul>
+      </div>
+    
+      <div id="game-over">
+      <h2>Your a rascal  <span id="money"></span> ahoy!</h2>
       <a href="javascript:void(0)" class="button restart">Try again?</a>
+      
     </div> 
-    
-    <div id="splash-main">
-      <h2>Raven Presents !</h2>
-	 </div>
-  
-    
-    
     
   </div>
   <script type="text/javascript" src="js/program.js"></script>

@@ -6,7 +6,20 @@ var player, money, stop, ticker;
 var canUseLocalStorage = 'localStorage' in window && window.localStorage !== null;
 var playSound;
 var splashTimer = 600.00;
+//InMenu UI Constansts
 var standWidth = 100;
+var buttonsPlaceY = 200;
+var auctionButton = {};
+var repairButton = {};
+var inventoryButton = {};
+var enemies = [];
+//Buttons
+//var auctionButton = document.getElementById("auction");
+//auctionButton.onclick = auctionMode(); 
+
+
+//AI Variables
+
 
 
 var timer = 0;
@@ -61,9 +74,16 @@ var assetLoader = (function()
   // images dictionary
   this.images        = 
   {
-    'bg'            : 'images/inventoryMenu.png',
-    'aution'            : 'images/logo.png',
-  
+    'bg'             : 'images/inventoryMenu.png',
+    'inventoryMenu'  : 'images/settings.png',
+    'repairMenu'     : 'images/settings.png',
+    'auctionButton'     : 'images/settings.png',
+    'repairButton'     : 'images/settings.png',
+    'fundsButton'     : 'images/settings.png',
+    'eventsButton'     : 'images/settings.png',
+    'avatar_normal'  : 'images/normal_walk.png'
+
+
    };
 
   // sounds dictionary
@@ -192,24 +212,17 @@ assetLoader.progress = function(progress, total) {
 
 function Init()
 {
-	
-	
+
 }
 
-if(ticker > 800)
-{
-	gameOver();
-}
+
 
 /**
  * Load the main menu
  */
 assetLoader.finished = function() 
 {
-	
- 	//Init();
-	 mainMenu();
- //splash();
+  splash();
 }
 
 
@@ -291,10 +304,11 @@ function Animation(spritesheet, frameSpeed, startFrame, endFrame)
 var background = (function() 
 {
 
-  var backdrop = {};
+  
  
    this.draw = function() {
     context.drawImage(assetLoader.images.bg, 0, 0);
+    
 
    };
 
@@ -303,15 +317,89 @@ var background = (function()
    */
   this.reset = function() 
   {
-    backdrop.x = 0;
-    backdrop.y = 0;
-  }
+    
+   }
+     
+     
+   this.onClick = function()
+   {
+   	  document.getElementById("gameMenu").click();
 
+   }
   return {
     draw: this.draw,
+    reset: this.reset,
+    onClick: this.onClick
+  };
+})();
+var btn = {};
+
+
+//Draw menu  Auction Objects
+var inventoryMenu = (function() 
+{
+  
+    this.draw = function() {
+    context.drawImage(assetLoader.images.auctionButton, 0, buttonsPlaceY);
+    context.drawImage(assetLoader.images.repairButton, 200, buttonsPlaceY);
+    context.drawImage(assetLoader.images.eventsButton, 500, buttonsPlaceY);
+	context.drawImage(assetLoader.images.fundsButton, 700, buttonsPlaceY);
+	
+   };
+ 	
+
+  /**
+   * Reset background to zero
+   */
+  this.reset = function() 
+  {
+  
+  	auctionButton.x = 0;
+    auctionButton.y = buttonsPlaceY;
+    auctionButton.style = undefined;
+    auctionButton.clicked = false;
+    
+   
+   
+   
+   
+   // disphide();
+
+    repairButton.x = 200;
+    repairButton.y = buttonsPlaceY;
+    eventsButton.x = 200;
+    eventsButton.y = buttonsPlaceY;
+	fundsButton.x = 200;
+    fundsButton.y = buttonsPlaceY;
+
+    
+    
+
+     }
+     
+    this.click = function ()
+    {
+    	auctionButton.clicked = true;
+    }
+    
+    if( auctionButton.clicked = true)
+    {
+    document.getElementById("auction").click();
+    }
+    else
+    {
+    	false;
+    }
+   
+   
+   	
+  return {
+    draw: this.draw,
+    click:this.click,
     reset: this.reset
   };
 })();
+
 
 /**
  * A vector for 2d space.
@@ -341,40 +429,15 @@ Vector.prototype.advance = function() {
 /**
  * The player object
  */
- var vehicle =(function(vehicle)
- {
-	vehicle.width       = 300;
-	vehicle.height      = 300;
-	vehicle.description = "";
-	vehicle.condition   = 0;
-	vehicle.originality = 0;
-	vehicle.basePrice   = 0;
-	
-	//sprite sheet
-	vehicle.sheet    = new SpriteSheet('images/logo.png', vehicle.width, cehicle.height);
-	vehicle.drawAnim = new Animation(vehicle.sheet, 0, 0, 0);
-	vehicle.anim     = vehicle.drawAnim;
-	vehicle.update   = function()
-	{
-	
-	};
-	
-	vehicle.draw = function()
-	{
-		vehicle.anim.draw(player.x, player.y);
-	};
- }(Object.create(Vector.prototype));
- 
 var player = (function(player) 
 {
   // add properties directly to the player imported object
   player.width     = 60;
   player.height    = 96;
-  player.money     = 0;
-  //player.speed     = 6;
+  player.speed     = 6;
 
   // jumping
-  //player.gravity   = 1;
+  player.gravity   = 1;
   player.dy        = 0;
   player.jumpDy    = -10;
   player.isFalling = false;
@@ -383,8 +446,8 @@ var player = (function(player)
   // spritesheets
   player.sheet     = new SpriteSheet('images/normal_walk.png', player.width, player.height);
   player.walkAnim  = new Animation(player.sheet, 4, 0, 15);
-  //player.jumpAnim  = new Animation(player.sheet, 4, 15, 15);
-  //player.fallAnim  = new Animation(player.sheet, 4, 11, 11);
+  player.jumpAnim  = new Animation(player.sheet, 4, 15, 15);
+  player.fallAnim  = new Animation(player.sheet, 4, 11, 11);
   player.anim      = player.walkAnim;
 
   Vector.call(player, 0, 0, 0, player.dy);
@@ -433,9 +496,7 @@ var player = (function(player)
   player.draw = function() {
     player.anim.draw(player.x, player.y);
   };
-  player.bid = function() {
-  
-  };
+
   /**
    * Reset the player's position
    */
@@ -445,7 +506,7 @@ var player = (function(player)
   };
 
   return player;
-})(Object.create(Vector.(Object.create(Vector.prototype))));
+})(Object.create(Vector.prototype));
 
 /**
  * Sprites are anything drawn to the screen (ground, enemies, etc.)*/
@@ -484,15 +545,16 @@ Sprite.prototype = Object.create(Vector.prototype);
 function update()
 {
     
- 		var deltaTime = (Date.now() - previousTime) / 1000;
-        previousTime = Date.now();
-        timer += deltaTime;
+	var deltaTime = (Date.now() - previousTime) / 1000;
+    previousTime = Date.now();
+    timer += deltaTime;
 
     if (timer > 1)
     {
-        timer = -999999; //test hack
-        mainMenu();
+        //timer = -999999; //test hack
+       // mainMenu();
      }
+    console.log("updating bitches");
     
 	
 }
@@ -512,6 +574,7 @@ performance.now = (function() {
 
 function updatePlayer() 
 {
+  
   player.update();
   player.draw();
 
@@ -525,31 +588,6 @@ function updatePlayer()
 /**
  * Game loop
  */
-function animate() 
-{
-    
-  if (!stop) 
-  {
-    requestAnimFrame( animate );
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    background.draw();
-      
-    console.log("this is ticker" + ticker);
-    console.log(timer);
-	update();
-    updatePlayer();
-    
-    // draw the money HUD
-    context.fillText('Money: ' + money + 'm', canvas.width - 240, 90);
-
-    // spawn a new Sprite
-  
-   
-	timer ++;
-    ticker++;
-  }
-}
 
 /**
  * Keep track of the spacebar events
@@ -585,6 +623,21 @@ document.onkeyup = function(e)
   }
 };
 
+
+var clicked = false;
+function mouseDownHandler(event)
+{
+    for (var i = 0; i < images.length; ++i)
+    {
+        if (images[i] === event.target)
+        {
+			clicked = true;
+        }
+    }
+}
+
+
+
 /**
  * Request Animation Polyfill
  */
@@ -600,23 +653,89 @@ var requestAnimFrame = (function()
           };
 })();
 
+
+
+function updateEnemies() {
+  // animate enemies
+  for (var i = 0; i < enemies.length; i++) {
+    enemies[i].update();
+    enemies[i].draw();
+
+    // player ran into enemy
+    if (player.minDist(enemies[i]) <= player.width - platformWidth/2) {
+      gameOver();
+    }
+  }
+
+  // remove enemies that have gone off screen
+  if (enemies[0] && enemies[0].x < -platformWidth) {
+    enemies.splice(0, 1);
+  }
+}
+
 /**
- * Show the main menu after loading all assets
+ * Update the players position and draw
+ */
+function updatePlayer() {
+  player.update();
+  player.draw();
+
+  // game over
+  if (player.y + player.height >= canvas.height) {
+    gameOver();
+  }
+}
+
+
+
+function animate() 
+{
+    
+  if (!stop) 
+  {
+    requestAnimFrame( animate );
+    context.clearRect(0, 0, canvas.width, canvas.height);
+	
+    background.draw();
+    document.getElementById('gameMenu').style.display = 'true';
+
+    console.log("this is ticker" + ticker);
+    console.log(timer);
+	update();
+    
+    updatePlayer();
+    
+    if(timer >= 400.00)
+	{
+	  mainMenu();
+	}
+    // draw the money HUD
+    context.fillText('Money: ' + money + 'm', canvas.width - 240, 90);
+
+    // spawn a new Sprite
+  
+    
+ 
+	timer ++;
+    ticker++;
+  }
+}
+/**
+ * Show the splash after loading all assets
  */
  
  
-function splash(deltaTime) 
+function splash() 
 {
-  timer ++;
-    ticker++;
-
-  document.getElementById('game-over').style.display = 'visible';
-  console.log("Splash Bitches"  + ticker);
+   //document.getElementById('splash');;
+  console.log("Splash Bitches");
   console.log(timer);
-	
+  
+ 
+  animate();
   $('#progress').hide();
   $('#splash').show();
-  $('#splash').addClass('splash');
+ 
   $('.sound').show();
 }
  
@@ -633,6 +752,7 @@ function mainMenu()
   }
 
   $('#progress').hide();
+  $('#splash').hide();
   $('#main').show();
   $('#menu').addClass('main');
   $('.sound').show();
@@ -644,32 +764,70 @@ function mainMenu()
 function startGame() 
 {
   document.getElementById('game-over').style.display = 'none';
+ 
   player.reset();
+  ticker = 0;
+  stop = false;
+  money = 2000;
+   
+  context.font = '26px arial, sans-serif';
+
+
+  animate();
+ 
+  update();
+
+  assetLoader.sounds.gameOver.pause();
+  assetLoader.sounds.bg.currentTime = 0;
+  assetLoader.sounds.bg.loop = true;
+  assetLoader.sounds.bg.play();
+  //load auction button
+      
+}
+
+function auctionMode() 
+{
+ // context.clearRect(0, 0, canvas.width, canvas.height);
+
+  document.getElementById('Auction').style.display = 'true';
+
+  
   ticker = 0;
   stop = false;
   money = 2000;
 
   context.font = '26px arial, sans-serif';
-
-   background.reset();
-
-  animate();
-  
-   $('#gameMenu').show();
-  $('#menu').addClass('main');
-  
+  update();
  
+  animate();
+  console.log("AuctionMode")
+ //background.draw();
+    //inventoryMenu.draw();
+
+  $('#Auction').show();
+  $('#menu').removeClass('gameMenu');
+  $('#menu').addClass('Auction');
+
+
+ 
+  $('.sound').show();
+
+  
   assetLoader.sounds.gameOver.pause();
   assetLoader.sounds.bg.currentTime = 0;
   assetLoader.sounds.bg.loop = true;
   assetLoader.sounds.bg.play();
 }
 
+
+
+
 /**
  * End the game and restart
  */
 function gameOver() 
 {
+  document.getElementById('game-over').style.display = 'true';
   stop = true;
   $('#money').html(money);
   $('#game-over').show();
@@ -681,8 +839,8 @@ function gameOver()
 /**
  * Click handlers for the different menu screens
  */
-$('.credits').click(function() 
-{
+$('.credits').click(function() {
+  
   $('#main').hide();
   $('#credits').show();
   $('#menu').addClass('credits');
@@ -690,16 +848,10 @@ $('.credits').click(function()
 $('.back').click(function() 
 {
   $('#credits').hide();
-  $('#main').show();
+  
   $('#menu').removeClass('credits');
 });
 
-$('.auction').click(function() 
-{
- 
-  $('#credits').show();
-  $('#menu').addClass('credits');
-});
 
 
 $('.sound').click(function() 
@@ -735,13 +887,49 @@ $('.sound').click(function()
 $('.play').click(function() 
 {
   $('#menu').hide();
+  $('#gameMenu').show();
+
   startGame();
+  
 });
 $('.restart').click(function() 
 {
   $('#game-over').hide();
+  $('#gameMenu').hide();
+
   startGame();
 });
+
+//InMenuButtons
+//auction Button
+$('#auction').click(function() 
+{
+	$('#menu').hide();
+	$('#auction').show();
+	$('#menu').removeClass('gameMenu');
+	$('#gameMenu').hide();
+	$('#Menu').addClass('auction'); 	
+	auctionMode();
+});
+ $('#repair').click(function()
+ {
+      //Some code
+  $('#menu').hide();
+  $('#gameMenu').show();
+
+ });
+
+/*
+$('.repair').click(function() 
+{
+  $('#game-over').hide();
+  $('#gameMenu').hide();
+
+  startGame();
+});
+*/
+
+
 
 assetLoader.downloadAll();
 })(jQuery);
