@@ -420,10 +420,7 @@ function vehicle ()
 	this.call(vehicle, 0, 0, 0, vehicle.dy);
 	this.update   = function()
 	{
-		for(i = 0; i < vehicles.length; i++)
-		{
-		  vehicles[i].anim = this.drawAnim;
-		}
+	    this.anim = this.drawAnim;
     }
 
    	
