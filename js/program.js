@@ -36,6 +36,12 @@ var enemies = [];
 
 //AI Variables
 var playerBid = 0;
+//temp
+var bidAmount = 200;
+var enemyBid = 0;
+var currentBid = 0;
+var vehiclePrice = 20000;
+var enemyCap = 0.8 * vehiclePrice;
 
 
 var timer = 0;
@@ -234,7 +240,7 @@ assetLoader.progress = function(progress, total)
 
 function Init()
 {
-
+	
 }
 
 
@@ -371,8 +377,8 @@ Vector.prototype.advance = function()
   this.y += this.dy;
 };
 
-
-
+//vehicle attributes
+var price, originality, condition, name;
 
 var vehicle =(function(vehicle)
 {
@@ -389,6 +395,14 @@ var vehicle =(function(vehicle)
 	vehicle.anim     = vehicle.drawAnim;
 	
 	Vector.call(vehicle,  VEHICLE_XPOS,  VEHICLE_YPOS, 0, vehicle.dy);
+	
+	vehicle.Init = function(price, originality, condition, name)
+	{
+		vehicle.name = name;
+		vehicle.description = ("Cost: $" + basePrice.toString() + " Originality: " + originality.toString() + " Condition: "  + "/n");
+		vehicle[vehicle.length] = vehicle;
+	}
+	
 	
 	vehicle.update   = function()
 	{
@@ -425,7 +439,7 @@ var bidder =(function(bidder)
 	bidder.low         = 0;
 	//bid percentage
 	bidder.bidcap      = 0;
-	bidder.slimeBid    = 0;
+	bidder.enemyBid    = 0;
 	
 	//sprite sheet
 	bidder.sheet    = new SpriteSheet('images/slime.png', bidder.width, bidder.height);
@@ -606,7 +620,7 @@ function updatePlayer()
 
 function updateVehicles() 
 {
-  
+ // vehicle.Init();
   vehicle.update();
   vehicle.draw();
 
@@ -681,35 +695,6 @@ var requestAnimFrame = (function()
           };
 })();
 
-
-function updateEnemies() 
-{
-  // animate enemies
-  for (var i = 0; i < enemies.length; i++) 
-  {
-    enemies[i].update();
-    enemies[i].draw();
-
-    // player ran into enemy
-    if (player.minDist(enemies[i]) <= player.width - platformWidth/2) 
-    {
-      gameOver();
-    }
-  }
-
-  // remove enemies that have gone off screen
-  if (enemies[0] && enemies[0].x < -platformWidth) 
-  {
-    enemies.splice(0, 1);
-  }
-}
-
-var platformWidth = 20;
-var platformHeight = 30;
-var platformBase = 200;
-var platformSpacer = 200;
-
-
 function animate() 
 {
     
@@ -724,12 +709,18 @@ function animate()
   	update();
     
     updatePlayer();
-    updateEnemies();
+    //updateEnemies();
    // spawnEnemySprites(); 
 	updateVehicles();
+	//draw enemies
 	updateBidders();
+	enemyBidding();
+	currentBidder();
     
-    
+    if(playerDidBid)
+    {
+	  auctionTimer ++;
+    }
     if(timer >= 400.00)
 	{
 	  mainMenu();
@@ -738,6 +729,17 @@ function animate()
     context.fillText('Money :  ' + '$'+ money  , canvas.width - 240, 90);
     //player bid
     context.fillText('Player Bid :  ' + '$'+ playerBid  ,0, 90);
+
+	  //enemy bid
+    context.fillText('Slimer Bids :  ' + '$'+ enemyBid  ,0, 120);
+    
+      //current bid
+    context.fillText('Current Bid :  ' + '$'+ currentBid  ,400, 120);
+
+	    //current bid
+    context.fillText('Vehicle Price :  ' + '$'+ vehiclePrice  ,400, 90);
+    
+     context.fillText('Auction Time :  ' + auctionTimer  ,200, 400);
 
     // spawn a new Sprite
   
@@ -792,8 +794,10 @@ function startGame()
   player.reset();
   ticker = 0;
   stop = false;
-  money = 2000;
+  money = 50000;
   playerBid = 0;
+  enemyBid = 0;
+  currentBid = 0;
    
   context.font = '26px arial, sans-serif';
   enemies = [];
@@ -809,8 +813,6 @@ function startGame()
   //load auction button
       
 }
-//temp
-var bidAmount = 200;
 
 function auctionMode() 
 {
@@ -821,12 +823,15 @@ function auctionMode()
  
   ticker = 0;
   stop = false;
-  money = 2000;
+  money = 50000;
+  enemyBid = 0;
+  playerBid = 0;
  
   context.font = '26px arial, sans-serif';
   update();
  // updateAuctionMode(); 
   animate();
+  
   
   console.log("AuctionMode");
   
@@ -834,11 +839,11 @@ function auctionMode()
    {
      console.log("Shithead");
      playerBidding();
-	 var currentBid;
-	 var vehiclePrice = 200;
+    
+	
 	
 	 currentBid = vehiclePrice + playerBid;
-
+	 
    }
   
  //background.draw();
@@ -855,14 +860,25 @@ function auctionMode()
   assetLoader.sounds.bg.loop = true;
   assetLoader.sounds.bg.play();
 }
+var playerDidBid = false;
+var auctionTimer = 0;
 
 //Player Bidding Function
 function playerBidding() 
-{
+{ 
 	
 	console.log("you're a dick man");
-	money = money - bidAmount;
-	playerBid +=  200;
+	
+	
+	playerBid = enemyBid + 400;
+	playerDidBid = true;
+	if(enemyBid = 0)
+	{
+	 money = money - currentBid;
+	}
+	
+	playerDidBid = true;
+
 	if(money <= 0)
 	{
 		money = 0;
@@ -873,6 +889,47 @@ function playerBidding()
 		
 	}
 }
+//Player Bidding Function
+
+var currentBid = 0;
+function currentBidder()
+{
+	if(playerBid > enemyBid)
+	{
+	  currentBid = playerBid;
+	}
+	if(playerBid < enemyBid)
+	{
+	  currentBid = enemyBid;
+	}
+}
+
+
+function enemyBidding() 
+{
+	
+	if(auctionTimer > 10000)
+	{
+		gameOver();
+	}
+	//currentBid != 0.8 * vehiclePrice
+	if(playerBid > enemyBid)
+	{
+		if(playerBid <= enemyCap)
+		{
+	
+			enemyBid = currentBid + 200;	
+			
+		}
+		else if(playerBid >= enemyCap)
+		{
+			sold();
+			money = money - currentBid;
+		}
+	
+	}
+}
+
 
 //End the game and restart
 function gameOver() 
@@ -886,15 +943,28 @@ function gameOver()
   assetLoader.sounds.gameOver.play();
 }
 
+//push vehicle in to inventory and tell player he won bidding
+function sold() 
+{
+  document.getElementById('sold').style.display = 'true';
+  stop = true;
+  $('#enemyBid').html(enemyBid);
+  $('#sold').show();
+  assetLoader.sounds.bg.pause();
+  assetLoader.sounds.gameOver.currentTime = 0;
+  assetLoader.sounds.gameOver.play();
+}
+
+
 
 // Click handlers for the different menu screens
 //Credits 
 $('.credits').click(function() 
 {
   $('#main').hide();
-  $('#credits').show();
-
+  
   $('#menu').addClass('credits');
+  $('#credits').show();
 });
 //Credits Back button
 $('.back').click(function() 
@@ -978,20 +1048,6 @@ $('.sound').click(function()
     }
   }
 });
-
-
-
-
-/*
-$('.repair').click(function() 
-{
-  $('#game-over').hide();
-  $('#gameMenu').hide();
-
-  startGame();
-});
-*/
-
 
 
 assetLoader.downloadAll();
