@@ -70,7 +70,7 @@ a
 }
 #splash
 {
-  background-image: url('../images/logo.png');
+  background-image: url('../images/Splash.png');
   height:600px;
   width: 900px;
   z-index: 20;
@@ -334,6 +334,7 @@ a
  /* background-image: url('../images/logo.png');*/
   display: none;
   text-align: center;
+  margin-top: 20em;
   padding-top: 92px;
   z-index: 1;
   width: 900px;

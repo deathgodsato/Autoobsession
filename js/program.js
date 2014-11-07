@@ -29,9 +29,8 @@ var inventoryButton = {};
 var enemies = [];
 
 
-//Buttons
-//var auctionButton = document.getElementById("auction");
-//auctionButton.onclick = auctionMode(); 
+//AuctionMode Game HUD bool 
+var inAuctionMode = false;
 
 
 //AI Variables
@@ -709,8 +708,6 @@ function animate()
   	update();
     
     updatePlayer();
-    //updateEnemies();
-   // spawnEnemySprites(); 
 	updateVehicles();
 	//draw enemies
 	updateBidders();
@@ -725,22 +722,28 @@ function animate()
 	{
 	  mainMenu();
 	}
-    // draw the money HUD
-    context.fillText('Money :  ' + '$'+ money  , canvas.width - 240, 90);
-    //player bid
-    context.fillText('Player Bid :  ' + '$'+ playerBid  ,0, 90);
-
-	  //enemy bid
-    context.fillText('Slimer Bids :  ' + '$'+ enemyBid  ,0, 120);
-    
-      //current bid
-    context.fillText('Current Bid :  ' + '$'+ currentBid  ,400, 120);
-
-	    //current bid
-    context.fillText('Vehicle Price :  ' + '$'+ vehiclePrice  ,400, 90);
-    
-     context.fillText('Auction Time :  ' + auctionTimer  ,200, 400);
-
+	if(inAuctionMode)
+	{
+	    // draw the money HUD
+	    context.fillText('Money :  ' + '$'+ money  , canvas.width - 240, 90);
+	    //player bid
+	    context.fillText('Player Bid :  ' + '$'+ playerBid  ,0, 90);
+	
+		  //enemy bid
+	    context.fillText('Slimer Bids :  ' + '$'+ enemyBid  ,0, 120);
+	    
+	      //current bid
+	    context.fillText('Current Bid :  ' + '$'+ currentBid  ,400, 120);
+	
+		    //current bid
+	    context.fillText('Vehicle Price :  ' + '$'+ vehiclePrice  ,400, 90);
+	    
+	     context.fillText('Auction Time :  ' + auctionTimer  ,200, 400);
+	}
+	else
+	{
+		inAuctionMode = false;
+	}
     // spawn a new Sprite
   
     
@@ -749,6 +752,7 @@ function animate()
     ticker++;
   }
 }
+
 /**
  * Show the splash after loading all assets
  */
@@ -819,7 +823,7 @@ function auctionMode()
  // context.clearRect(0, 0, canvas.width, canvas.height);
 
   document.getElementById('Auction').style.display = 'true';
-  
+  inAuctionMode = true;
  
   ticker = 0;
   stop = false;
