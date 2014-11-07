@@ -426,10 +426,7 @@ function vehicle ()
    	
 	this.draw = function()
 	{
-	for(i = 0; i < vehicles.length; i++)
-		{
-		  vehicles[i].anim.draw(this.x, this.y);
-		}
+		this.anim.draw(this.x, this.y);
 	};
 	
 	
@@ -448,6 +445,7 @@ function createVehicle()
 {
 	car = new vehicle();
 	car.init(300, 300, 100, 20, 30, "test");
+	vehicles[vehicles.length] = car;
 }
 
 /**
