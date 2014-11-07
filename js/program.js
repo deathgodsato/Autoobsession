@@ -26,6 +26,7 @@ var auctionButton = {};
 var repairButton = {};
 var bidButton = {};
 var inventoryButton = {};
+
 var enemies = [];
 
 
@@ -510,32 +511,11 @@ var player = (function(player)
   player.update = function() 
   {
 
-    // jump if not currently jumping or falling
-    if (KEY_STATUS.space && player.dy === 0 && !player.isJumping) 
-    {
-      player.isJumping = true;
-      player.dy = player.jumpDy;
-      jumpCounter = 12;
-      assetLoader.sounds.jump.play();
-    }
-
-    // jump higher if the space bar is continually pressed
-    if (KEY_STATUS.space && jumpCounter) {
-      player.dy = player.jumpDy;
-    }
-
-    jumpCounter = Math.max(jumpCounter-1, 0);
-
+    
     this.advance();
 
-    // add gravity
-    if (player.isFalling || player.isJumping) {
-      player.dy += player.gravity;
-    }
-
-     else {
-      player.anim = player.walkAnim;
-    }
+    player.anim = player.walkAnim;
+    
 
     player.anim.update();
   };
@@ -610,11 +590,6 @@ function updatePlayer()
   player.update();
   player.draw();
 
-  // game oversplashTimer--;
-  if (player.y + player.height >= canvas.height) 
-  {
-    gameOver();
-  }
 }
 
 function updateVehicles() 
@@ -633,38 +608,6 @@ function updateBidders()
 }
 
 
-
-// Keep track of the spacebar events
-var KEY_CODES = 
-{
-  32: 'space'
-};
-var KEY_STATUS = {};
-for (var code in KEY_CODES) 
-{
-  if (KEY_CODES.hasOwnProperty(code)) 
-  {
-     KEY_STATUS[KEY_CODES[code]] = false;
-  }
-}
-document.onkeydown = function(e) 
-{
-  var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
-  if (KEY_CODES[keyCode]) 
-  {
-    e.preventDefault();
-    KEY_STATUS[KEY_CODES[keyCode]] = true;
-  }
-};
-document.onkeyup = function(e) 
-{
-  var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
-  if (KEY_CODES[keyCode]) 
-  {
-    e.preventDefault();
-    KEY_STATUS[KEY_CODES[keyCode]] = false;
-  }
-};
 
 //Mouse clicks
 var clicked = false;
