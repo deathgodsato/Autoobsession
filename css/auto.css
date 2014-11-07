@@ -5,13 +5,13 @@
 body 
 {
   font-family: arial, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   cursor: default;
-  color:maroon;
+  color: #751ec3;
 }
 
 canvas 
@@ -138,6 +138,41 @@ a
 
   
 }
+#repairBackButton
+{
+  background: url('../images/repairBackButton.png') no-repeat 0 0;
+  color: white;
+  font-weight: bold;
+  width:150px;
+  height:50px;
+  cursor:pointer;
+
+	
+}
+#addFundsBackButton
+{
+  background: url('../images/repairBackButton.png') no-repeat 0 0;
+  color: white;
+  font-weight: bold;
+  width:150px;
+  height:50px;
+  cursor:pointer;
+
+	
+}
+
+#auctionBackButton
+{
+  background: url('../images/repairBackButton.png') no-repeat 0 0;
+  color: white;
+  font-weight: bold;
+  width:150px;
+  height:50px;
+  cursor:pointer;
+
+	
+}
+
 #addFunds
 {
    background: url('../images/addFundsButton.png') no-repeat 0 0;
@@ -167,7 +202,16 @@ a
   height:50px;
   cursor:pointer;
 
-  
+}
+#purchaseButton
+{
+  background: url('../images/bidButton.png') no-repeat 0 0;
+  color: white;
+  font-weight: bold;
+  width:150px;
+  height:50px;
+  cursor:pointer;
+
 }
 
 
@@ -231,7 +275,7 @@ a
 
 #Auction
 {
-  /*background-image: url('../images/logo.png');*/
+  
   display: none;
   text-align: center;
   padding-top: 92px;
@@ -244,7 +288,6 @@ a
 #menu.Auction
 {
 	
- /* background-image: url('../images/logo.png');*/
   display: none;
   text-align: center;
   padding-top: 92px;
@@ -255,6 +298,65 @@ a
 
 }
 #Auction  li 
+{
+  padding: 5px 0;
+}
+
+#RepairShop
+{
+  
+  display: none;
+  text-align: center;
+  padding-top: 92px;
+  z-index: 1;
+  width: 900px;
+  height: 600px;
+  position: absolute;
+}
+
+#menu.RepairShop
+{
+	
+ 
+  display: none;
+  text-align: center;
+  padding-top: 92px;
+  z-index: 1;
+  width: 900px;
+  height: 600px;
+  position: absolute;
+
+}
+#RepairShop  li 
+{
+  padding: 5px 0;
+}
+#AddFunds
+{
+  background-image: url('../images/logo.png');
+  display: none;
+  text-align: center;
+  padding-top: 92px;
+  z-index: 1;
+  width: 900px;
+  height: 600px;
+  position: absolute;
+}
+
+#menu.AddFunds
+{
+	
+ background-image: url('../images/logo.png');
+  display: none;
+  text-align: center;
+  padding-top: 92px;
+  z-index: 1;
+  width: 900px;
+  height: 600px;
+  position: absolute;
+
+}
+#AddFunds  li 
 {
   padding: 5px 0;
 }

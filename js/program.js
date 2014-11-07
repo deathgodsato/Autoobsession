@@ -23,16 +23,23 @@ var VEHICLE_YPOS = 250;
 
 //Buttons functions
 var auctionButton = {};
+var auctionBackButton = {};
 var repairButton = {};
 var bidButton = {};
 var inventoryButton = {};
+//Repair Shop Buttons
+var purchaseButton = {};
+var repairBackButton = {};
+var addFundsButton = {};
+var addFundsBackButoon = {};
 
 var enemies = [];
 
 
 //AuctionMode Game HUD bool 
 var inAuctionMode = false;
-
+var inRepairMode = false;
+var inAddFundsMode = false;
 
 //AI Variables
 var playerBid = 0;
@@ -646,11 +653,9 @@ function animate()
 
   	update();
     
+   // resetStates();
     
-    if(playerDidBid)
-    {
-	  auctionTimer ++;
-    }
+   
     if(timer >= 400.00)
 	{
 	  mainMenu();
@@ -658,6 +663,10 @@ function animate()
 	//Auction Mode Game Display and everything happening in Auction 
 	if(inAuctionMode)
 	{
+		if(playerDidBid)
+   		{
+	  		auctionTimer ++;
+    	}
 		updateVehicles();
 		updatePlayer();
 		//draw enemies
@@ -756,35 +765,51 @@ function startGame()
   //load auction button
       
 }
+function resetStates()
+{
+	inRepairMode = false;
+	inAuctionMode = false;
+	inAddFundsMode = false;
+}
+
+//Repair State
+function repairState()
+{
+  document.getElementById('RepairShop').style.display = 'true';
+  inRepairMode = true;
+  console.log("Grow up asshole lets repair shit");
+}
+function addFundsMode()
+{
+  document.getElementById('AddFunds').style.display = 'true';
+  inAddFundsMode = true;
+}
 
 function auctionMode() 
 {
  // context.clearRect(0, 0, canvas.width, canvas.height);
 
-  document.getElementById('Auction').style.display = 'true';
-  inAuctionMode = true;
+   document.getElementById('Auction').style.display = 'true';
+   inAuctionMode = true;
  
-  ticker = 0;
-  stop = false;
-  money = 50000;
-  enemyBid = 0;
-  playerBid = 0;
+   ticker = 0;
+   stop = false;
+   money = 50000;
+   enemyBid = 0;
+   playerBid = 0;
  
-  context.font = '26px arial, sans-serif';
-  update();
- // updateAuctionMode(); 
-  animate();
+   context.font = '26px arial, sans-serif';
+   update();
+  // updateAuctionMode(); 
+   animate();
   
-  
-  console.log("AuctionMode");
+   
+   console.log("AuctionMode");
   
    auctionMode.update = function() 
    {
      console.log("Shithead");
      playerBidding();
-    
-	
-	
 	 currentBid = vehiclePrice + playerBid;
 	 
    }
@@ -937,13 +962,24 @@ $('.restart').click(function()
 //auction Button
 $('#auction').click(function() 
 {
-	$('#menu').hide();
 	$('#auction').show();
-	$('#menu').removeClass('gameMenu');
 	$('#gameMenu').hide();
-	$('#Menu').addClass('auction'); 	
+	$('#menu').addClass('auction'); 	
 	auctionMode();
 });
+$('#auctionBackButton').click(function()
+{
+	inAuctionMode = false;
+	resetStates();
+  
+  $('#menu').removeClass('Auction');
+  $('#Auction').hide();
+ 
+  $('#menu').addClass('gameMenu');
+  $('#gameMenu').show();
+  
+});
+
 //Inside Auction Bid Button
 $('#bid').click(function()
 {
@@ -953,11 +989,33 @@ $('#bid').click(function()
 //Repair to menu Repair
 $('#repair').click(function()
 {
-      //Some code
-  $('#menu').hide();
+  
+  $('#gameMenu').hide();
+  $('#RepairShop').show();
+  repairState();
+
+});
+$('#repairBackButton').click(function()
+{
+  $('#RepairShop').hide();
   $('#gameMenu').show();
 
 });
+
+$('#addFunds').click(function() 
+{
+	$('#gameMenu').hide();
+    $('#AddFunds').show();
+    $('#menu').addClass('AddFunds');
+	addFundsMode();
+});
+$('#addFundsBackButton').click(function()
+{
+  $('#AddFunds').hide();
+  $('#gameMenu').show();
+
+});
+
 
 //Sound Button
 

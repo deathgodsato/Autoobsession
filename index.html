@@ -21,12 +21,10 @@
       
       <div id="main">
         <h1>Auto Obsessions</h1>
-        <ul>
-          <li><a href="javascript:void(0)" class="button play">Start Game</a></li>
-          <li><a href="javascript:void(0)" class="button credits">Credits</a></li>
-  	<!--	  <li><input type="button" id="auction" onclick="auctionMode()"></li> ---->
-  
-        </ul>
+         <ul>
+           <li><a href="javascript:void(0)" class="button play">Start Game</a></li>
+           <li><a href="javascript:void(0)" class="button credits">Credits</a></li>
+         </ul>
       </div>
       
      
@@ -56,8 +54,8 @@
         <h1>My Inventory</h1>
         <ul>
           <li><input type="button" id="auction" onmouseover="auctionButton()" onclick="auctionMode()"></li>
-          <li><input type="button" id="addFunds" onmouseover="addFundsButton()" onclick="addFundState()"></li>
-          <li><input type="button" id="repair" onmouseover="addFundsButton()" onclick="repairState()"></li>
+          <li><input type="button" id="addFunds" onmouseover="addFundsButton()" onclick="addFundMode()"></li>
+          <li><input type="button" id="repair" onmouseover="repairButton()" onclick="repairState()"></li>
           <li><input type="button" id="myCars" onmouseover="inventoryButton()" onclick="inventoryState()"></li>
         </ul>
       </div>
@@ -68,15 +66,32 @@
         <ul>
           <li><input type="button" id="bid" onmouseover="bidButton()" onclick="playerBid()"></li>
        </ul>
+        <ul>
+          <li><input type="button" id="auctionBackButton" onmouseover="auctionBackButton()" onclick="startGame()"></li>
+       </ul>
+
       </div>
-      <!---
+      
         <div id="RepairShop">
         <h1>Repair Shop</h1>
         <ul>
           <li><input type="button" id="purchaseButton" onmouseover="purchaseButton()" onclick="purchasePart()"></li>
        </ul>
+       <ul>
+          <li><input type="button" id="repairBackButton" onmouseover="repairBackButton()" onclick="startGame()"></li>
+       </ul>
+       </div>
+       <div id="AddFunds">
+         <h1>AddFunds</h1>
+          <ul>
+            <li><input type="button" id="addFundsBackButton" onmouseover="addFundsBackButton()" onclick="startGame()"></li>
+          </ul>
+
       </div>
---->
+
+
+      </div>
+
     
       <div id="game-over">
       <h2>Sold to Other Guy  <span id="enemyBid"></span> ahoy!</h2>
