@@ -601,14 +601,14 @@ function updatePlayer()
 
 function updateVehicles() 
 {
-  
-  vehicle.update();
-  vehicle.draw();
-
-  // game oversplashTimer--;
-  if (vehicle.y + vehicle.height >= canvas.height) 
+  for(i = 0; i < vehicles.length; i++)
   {
-    gameOver();
+	vehicles[i].update();
+	vehicles[i].draw();
+	if (vehicles[i].y + vehicles[i].height >= canvas.height) 
+	{
+		gameOver();
+	}
   }
 }
 
