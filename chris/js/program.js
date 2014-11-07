@@ -4,7 +4,7 @@ var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 var player, money, stop, ticker;
 //vehicle class
-var vehicle = [];
+var vehicles = [];
 var canUseLocalStorage = 'localStorage' in window && window.localStorage !== null;
 var playSound;
 var splashTimer = 600.00;
@@ -387,52 +387,71 @@ Vector.prototype.advance = function()
   this.y += this.dy;
 };
 
-var vehicle =(function(vehicle)
+function vehicle ()
 {
-	vehicle.width       = 300;
-	vehicle.height      = 300;
-	vehicle.name        = "";
-	vehicle.description = "";
-	vehicle.condition   = 0;
-	vehicle.originality = 0;
-	vehicle.basePrice   = 0;
+	this.width          = 300;
+	this.height         = 300;
+	this.name           = "Trophy";
+	this.condition      = 100;
+	this.originality    = 99;
+	this.basePrice      = 1;
+	this.description    = "Error";
 	
-	vehicle.Init = function(price, originality, condition, name)
+	this.sheet    = new SpriteSheet('images/logo.png', vehicle.width, vehicle.height);
+	this.drawAnim = new Animation(vehicle.sheet, 0, 0, 0);
+	
+	this.Init = function(Width, Height, Price, Originality, Condition, Name)
 	{
-		vehicle.name = name;
-		vehicle.description = "Cost: $" + basePrice.toString() + " Originality: " + originality.toString() + " Condition: " +  + "/n";
-		vehicle[vehicle.length] = vehicle;
+		this.name = name;
+		this.width = Width;
+		this.height = Height;
+		this.basePrice = Price;
+		this.originality = Originality;
+		this.condition = Condition;
+		this.initialized = true;
+		this.description = "Cost: $" + basePrice.toString() + " Originality: " + originality.toString() + "% Condition: " +  + "<br>";
+		//sprite sheet
+		this.sheet    = new SpriteSheet('images/logo.png', vehicle.width, vehicle.height);
+		this.drawAnim = new Animation(vehicle.sheet, 0, 0, 0);
 	}
-	//sprite sheet
-	vehicle.sheet    = new SpriteSheet('images/logo.png', vehicle.width, vehicle.height);
-	vehicle.drawAnim = new Animation(vehicle.sheet, 0, 0, 0);
-	vehicle.anim     = vehicle.drawAnim;
 	
-	Vector.call(vehicle, 0, 0, 0, vehicle.dy);
-	vehicle.update   = function()
+	this.anim     = this.drawAnim;
+	
+	this.call(vehicle, 0, 0, 0, vehicle.dy);
+	this.update   = function()
 	{
-	  vehicle.anim = vehicle.drawAnim;
+		for(i = 0; i < vehicles.length; i++)
+		{
+		  vehicles[i].anim = this.drawAnim;
+		}
     }
 
    	
-	vehicle.draw = function()
+	this.draw = function()
 	{
-		vehicle.anim.draw(vehicle.x, vehicle.y);
+	for(i = 0; i < vehicles.length; i++)
+		{
+		  vehicles[i].anim.draw(this.x, this.y);
+		}
 	};
 	
 	
 	   
-    vehicle.reset = function() 
+    this.reset = function() 
     {
-    vehicle.x = 164;
-    vehicle.y = 150;
+		this.x = 164;
+		this.y = 150;
     }
     return vehicle;
 
 	
-})(Object.create(Vector.prototype));
+}(Object.create(Vector.prototype));
 
-
+function createVehicle()
+{
+	car = new vehicle();
+	car.init(300, 300, 100, 20, 30, "test");
+}
 
 /**
  * The player object
@@ -767,7 +786,7 @@ function startGame()
   ticker = 0;
   stop = false;
   money = 2000;
-  vehicle.Init();
+  vehicle.Init(40, 100, 100, "beatnik");
   context.font = '26px arial, sans-serif';
   enemies = [];
 
