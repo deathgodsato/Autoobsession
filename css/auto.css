@@ -13,7 +13,12 @@ body
   cursor: default;
   color: #751ec3;
 }
-
+.h2
+{
+	font-family: arial, sans-serif;
+	font-size: 32px;
+	color: white;	
+}
 canvas 
 {
   position: absolute;

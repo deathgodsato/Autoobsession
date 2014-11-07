@@ -44,7 +44,7 @@ var inAddFundsMode = false;
 //AI Variables
 var playerBid = 0;
 //temp
-var bidAmount = 200;
+var bidAmount = 0.2 * vehiclePrice;
 var enemyBid = 0;
 var currentBid = 0;
 var vehiclePrice = 20000;
@@ -688,12 +688,25 @@ function animate()
 	    context.fillText('Vehicle Price :  ' + '$'+ vehiclePrice  ,400, 90);
 	    
 	    context.fillText('Auction Time :  ' + auctionTimer  ,200, 400);
+	    
+	    if((enemyBid <= 0) && (playerDidBid))
+	    {
+	    	 context.fillText('Slimers Out '  ,0, 160);
+
+	    }
 	}
 	else
 	{
 		inAuctionMode = false;
 	}
-   
+    if(inRepairMode)
+    {
+    	context.fillText('Welcome to the Repair Shop'   ,400, 120);
+    }
+    else 
+    {
+    	inRepairMode = false;
+    }
   
  
 	timer ++;
@@ -755,7 +768,7 @@ function startGame()
   enemies = [];
 
   animate();
- 
+  resetStates();
   update();
 
   assetLoader.sounds.gameOver.pause();
@@ -909,6 +922,7 @@ function gameOver()
   assetLoader.sounds.bg.pause();
   assetLoader.sounds.gameOver.currentTime = 0;
   assetLoader.sounds.gameOver.play();
+   
 }
 
 //push vehicle in to inventory and tell player he won bidding
@@ -921,6 +935,7 @@ function sold()
   assetLoader.sounds.bg.pause();
   assetLoader.sounds.gameOver.currentTime = 0;
   assetLoader.sounds.gameOver.play();
+   
 }
 
 
@@ -954,6 +969,7 @@ $('.restart').click(function()
 {
   $('#game-over').hide();
   $('#gameMenu').hide();
+  
 
   startGame();
 });
@@ -999,6 +1015,7 @@ $('#repairBackButton').click(function()
 {
   $('#RepairShop').hide();
   $('#gameMenu').show();
+  resetStates();
 
 });
 
@@ -1049,7 +1066,6 @@ $('.sound').click(function()
     }
   }
 });
-
 
 assetLoader.downloadAll();
 })(jQuery);
