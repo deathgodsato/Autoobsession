@@ -477,8 +477,6 @@ var bidder =(function(bidder)
 })(Object.create(Vector.prototype));
 
 
-
-
 // The player object
 var player = (function(player) 
 {
@@ -607,8 +605,6 @@ function updateBidders()
 
 }
 
-
-
 //Mouse clicks
 var clicked = false;
 function mouseDownHandler(event)
@@ -636,7 +632,7 @@ var requestAnimFrame = (function()
             window.setTimeout(callback, 1000 / 60);
           };
 })();
-
+//Update the Game Loop
 function animate() 
 {
     
@@ -650,12 +646,6 @@ function animate()
 
   	update();
     
-    updatePlayer();
-	updateVehicles();
-	//draw enemies
-	updateBidders();
-	enemyBidding();
-	currentBidder();
     
     if(playerDidBid)
     {
@@ -665,8 +655,15 @@ function animate()
 	{
 	  mainMenu();
 	}
+	//Auction Mode Game Display and everything happening in Auction 
 	if(inAuctionMode)
 	{
+		updateVehicles();
+		updatePlayer();
+		//draw enemies
+		updateBidders();
+		enemyBidding();
+		currentBidder();
 	    // draw the money HUD
 	    context.fillText('Money :  ' + '$'+ money  , canvas.width - 240, 90);
 	    //player bid
@@ -681,15 +678,14 @@ function animate()
 		    //current bid
 	    context.fillText('Vehicle Price :  ' + '$'+ vehiclePrice  ,400, 90);
 	    
-	     context.fillText('Auction Time :  ' + auctionTimer  ,200, 400);
+	    context.fillText('Auction Time :  ' + auctionTimer  ,200, 400);
 	}
 	else
 	{
 		inAuctionMode = false;
 	}
-    // spawn a new Sprite
+   
   
-    
  
 	timer ++;
     ticker++;
