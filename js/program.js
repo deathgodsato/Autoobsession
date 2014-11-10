@@ -104,8 +104,7 @@ var assetLoader = (function()
      'avatar_normal'  : 'images/normal_walk.png',
      //enemies
      'slime'         : 'images/slime.png',
-     'spikes'        : 'images/slime.png',
-
+     
    };
 
   // sounds dictionary
@@ -552,26 +551,21 @@ function animate()
 	//Auction Mode Game Display and everything happening in Auction 
 	if(inAuctionMode)
 	{
-		if(playerDidBid)
-   		{
-	  		auctionTimer ++;
-    	}
+		auctionTimer ++;
     	
-    		    
-		enemyBids.push(1) * Math.random();
-		enemyBids.push(2) * Math.random();
+		enemyBids.push(1);
+		enemyBids.push(2);
 		enemyBids.push(3);
 		enemyBids.push(4);
 		enemyBids.push(5);
 		enemyBids.push(6);
 		
 		
-	
 	    //Add four bidders
 	    bidders.push("Bidder235:" );
-		bidders.push("Bidder 2147" );
-		bidders.push("katana" );
-		bidders.push("Bobby" );
+		bidders.push("Gorguts: " );
+		bidders.push("katana: " );
+		bidders.push("Bobby: " );
 		/*
 		for(var i = 0; i < bidders.length ; ++ i )
 		{
@@ -597,13 +591,13 @@ function animate()
 	  	var player4;
 	  	
 	  	 	//Player
-	  	if( playerBid = currentBid)
+	  	if(( playerBid = currentBid)&& (playerDidBid))
 	  	{
-	  		player.y = 40;
+	  		player.y = 10;
 	  	}
 	  	else
 	  	{
-	  	  player.y = 300;
+	  	  player.y = 150;
 	  	}
 	  	
 	  	//Enemy 1
@@ -647,13 +641,10 @@ function animate()
 		}
 	
 	   
-
-	 
 	      //current bid
-	      var gorguts;
-	      gorguts = context.drawImage(curBidImage,380,100)+ context.fillText('Current Bid :  ' + '$'+ currentBid  ,400, 120);
+	    var gorguts;
+	    gorguts = context.drawImage(curBidImage,380,100)+ context.fillText('Current Bid :  ' + '$'+ currentBid  ,400, 120);
 	    
-	
 		    //current bid
 	    context.fillText('Vehicle Price :  ' + '$'+ vehiclePrice  ,400, 90);
 	    
@@ -738,16 +729,6 @@ function repairState()
   document.getElementById('RepairShop').style.display = 'true';
   inRepairMode = true;
   
-  /*
-  for (var i = 0; i < matrix.length; i++)
-  {
-	for (var j = 0; j < matrix.length; j++)
-	{
-		document.write ("Element (" + i + ", " + j + ") is " + matrix[i][j] + " -- ");
-	}
-	document.write("<br>");
-  }
-*/
 }
 function addFundsMode()
 {
@@ -898,19 +879,6 @@ function enemyBidding()
 		}
 	
 	}
-	/*
-	else
-	{
-		playerBid = 0;
-		playerDidBid = false;
-	}
-	*/
-	/*
-	for(var i = 0; i < bidders.length; i++)
-	{
-	  console.log(" " + i + ": " + bidders[i]);
-	}
-	*/	
 }
 
 
